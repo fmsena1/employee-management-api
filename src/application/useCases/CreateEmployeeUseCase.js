@@ -4,6 +4,13 @@ class CreateEmployeeUseCase {
   }
 
   async execute(employeeData) {
+    const requiredFields = ['cpf', 'name', 'email', 'shirtSize', 'shoeSize'];
+    for (const field of requiredFields) {
+      if (!employeeData[field]) {
+        throw new Error(`Field ${field} is required`);
+      }
+    }
+
     const existingEmployee = await this.employeeRepository.findByCpf(employeeData.cpf);
     if (existingEmployee) {
       throw new Error('Employee with this CPF already exists');
