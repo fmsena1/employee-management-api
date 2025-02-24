@@ -12,6 +12,10 @@ class SequelizeEmployeeRepository extends EmployeeRepository {
     return employees;
   }
 
+  async findByCpf(cpf) {
+    return await Employee.findOne({ where: { cpf } });
+  }
+
   async findById(id) {
     const employee = await Employee.findByPk(id);
     return employee;

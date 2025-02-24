@@ -6,14 +6,10 @@ const User = require('./domain/entities/User');
 const PORT = process.env.PORT || 3000;
 
 sequelize.sync({ force: true }).then(async () => {
-  await User.create({
-    email: 'admin@example.com',
-    password: 'hashedpassword',
-  });
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 9; i++) {
     await Employee.create({
-      cpf: `1234567890${i}`,
+      cpf: `123.456.789.0${i}`,
       name: `Employee ${i}`,
       email: `employee${i}@example.com`,
       shirtSize: ['PP', 'M', 'G'][i % 3],
