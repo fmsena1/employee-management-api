@@ -79,7 +79,11 @@ const sendEmail = async (req, res) => {
       res.status(404).json({ error: "Employees not found" });
     }
   } catch (err) {
-    logger.error(`Error sending emails: ${err.message}`);
+    console.error(err);
+    logger.error(`Error sending emails: ${err}`);
+    if (err.response) {
+      logger.error(`Response body: ${JSON.stringify(err.response.body)}`);
+    }
     res.status(500).json({ error: err.message });
   }
 };

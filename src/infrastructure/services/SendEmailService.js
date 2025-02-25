@@ -1,5 +1,6 @@
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const send = async (employees) => {
   const messages = employees.map(employee => ({
     to: employee.email,
@@ -24,7 +25,10 @@ Equipe Employee Management`,
     await sgMail.send(messages);
   } catch (error) {
     console.error('Error sending email:', error);
-    throw new Error('Erro ao enviar email');
+    if (error.response) {
+      console.error('Response body:', error.response.body);
+    }
+    throw new Error(`Erro ao enviar email: ${error.message}`);
   }
 };
 
