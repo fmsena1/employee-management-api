@@ -3,7 +3,6 @@ const CreateEmployeeUseCase = require('../../../application/useCases/CreateEmplo
 const GetEmployeeUseCase = require('../../../application/useCases/GetEmployeeUseCase');
 const UpdateEmployeeUseCase = require('../../../application/useCases/UpdateEmployeeUseCase');
 const DeleteEmployeeUseCase = require('../../../application/useCases/DeleteEmployeeUseCase');
-const sendEmailService = require('../../../infrastructure/services/SendEmailService');
 const logger = require('../../../config/logger');
 
 const employeeRepository = new SequelizeEmployeeRepository();
@@ -56,42 +55,10 @@ const deleteEmployees = async (req, res) => {
   }
 };
 
-const sendEmail = async (req, res) => {
-  try {
-    const { ids } = req.body;
-    if (!Array.isArray(ids)) {
-      logger.warn('Invalid input, expected an array of IDs');
-      return res.status(400).json({ error: "Invalid input, expected an array of IDs" });
-    }
-
-    const employees = await employeeRepository.findAll({
-      where: {
-        id: ids
-      }
-    });
-
-    if (employees.length > 0) {
-      await sendEmailService.send(employees);
-      logger.info(`Emails sent to employees: ${ids.join(', ')}`);
-      res.status(200).json({ message: "Emails sent successfully" });
-    } else {
-      logger.warn(`Employees not found: ${ids.join(', ')}`);
-      res.status(404).json({ error: "Employees not found" });
-    }
-  } catch (err) {
-    console.error(err);
-    logger.error(`Error sending emails: ${err}`);
-    if (err.response) {
-      logger.error(`Response body: ${JSON.stringify(err.response.body)}`);
-    }
-    res.status(500).json({ error: err.message });
-  }
-};
 
 module.exports = {
   createEmployee,
   getAllEmployees,
   updateEmployee,
   deleteEmployees,
-  sendEmail,
 };

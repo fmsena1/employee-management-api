@@ -148,29 +148,4 @@ router.put("/employees/:id", authMiddleware, employeeController.updateEmployee);
  */
 router.delete("/employees", authMiddleware, employeeController.deleteEmployees);
 
-/**
- * @swagger
- * /employees/send:
- *   post:
- *     summary: Send an email to employees
- *     tags: [Employees]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subject:
- *                 type: string
- *               message:
- *                 type: string
- *     responses:
- *       200:
- *         description: Email sent successfully
- */
-router.post("/employees/send", authMiddleware, employeeController.sendEmail);
-
 module.exports = router;
